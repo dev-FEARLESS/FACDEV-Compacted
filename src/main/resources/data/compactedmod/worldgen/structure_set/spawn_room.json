@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "compactedmod:spawn_room",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "salt": 123273674,
+
+    "spacing": 20,
+
+    "separation": 6,
+
+    "type": "minecraft:random_spread"
+  }
+}
