@@ -1,5 +1,6 @@
 package net.facdev.compactedmod;
 
+import net.facdev.compactedmod.event.PlayerSpawnHandler;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -17,18 +18,17 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
-
 @Mod(CompactedMod.MOD_ID)
 public class CompactedMod {
     public static final String MOD_ID = "compacted_mod";
     public static final Logger LOGGER = LogUtils.getLogger();
-    
+
     public CompactedMod(IEventBus modEventBus, ModContainer modContainer) {
+        // Register the player spawn handler
+        NeoForge.EVENT_BUS.register(new PlayerSpawnHandler());
 
         modEventBus.addListener(this::commonSetup);
-
         NeoForge.EVENT_BUS.register(this);
-
         modEventBus.addListener(this::addCreative);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -45,8 +45,7 @@ public class CompactedMod {
     }
 
     @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
+    public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
         }
