@@ -1,5 +1,7 @@
 package net.facdev.compactedmod;
 
+import net.facdev.compactedmod.command.CompactCommand;
+import net.facdev.compactedmod.event.PlayerDeathHandler;
 import net.facdev.compactedmod.event.PlayerSpawnHandler;
 import org.slf4j.Logger;
 
@@ -16,6 +18,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 @Mod(CompactedMod.MOD_ID)
@@ -26,6 +29,9 @@ public class CompactedMod {
     public CompactedMod(IEventBus modEventBus, ModContainer modContainer) {
         // Register the player spawn handler
         NeoForge.EVENT_BUS.register(new PlayerSpawnHandler());
+
+        // Register the player death handler
+        NeoForge.EVENT_BUS.register(new PlayerDeathHandler());
 
         modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
@@ -42,6 +48,12 @@ public class CompactedMod {
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
+    }
+
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event) {
+        CompactCommand.register(event.getDispatcher());
+        LOGGER.info("Registered /compact command");
     }
 
     @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
